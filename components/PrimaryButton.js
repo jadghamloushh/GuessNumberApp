@@ -1,19 +1,14 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-function PrimaryButton({ children }) {
-  const [isPressed, setIsPressed] = useState(false);
-  function pressHandler() {
-    setIsPressed(!isPressed);
-  }
-
+function PrimaryButton({ children, onPress }) {
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
         style={({ pressed }) =>
           pressed ? styles.pressed : styles.buttonInnerContainer
         }
-        onPress={pressHandler}
+        onPress={onPress}
       >
         <Text style={styles.buttonText}>{children}</Text>
       </Pressable>

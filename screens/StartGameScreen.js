@@ -1,24 +1,58 @@
-import { TextInput, View, Text, StyleSheet } from "react-native";
+import { TextInput, View, Text, StyleSheet, Alert } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useState } from "react";
 
 function StartGameScreen() {
-  const [currentNumber, setCurrentNumber] = useState();
+  const [enteredNumber, setEnteredNumber] = useState("");
+
+  function numberInputHandler(currentNumber) {
+    setEnteredNumber(currentNumber);
+  }
+
+  function resetInputHandler() {
+    setEnteredNumber("");
+  }
+
+  function confirmInputHandler() {
+    const chosenNumber = parseInt(enteredNumber);
+
+    if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      showAlert("Invalid Input");
+      resetInputHandler();
+      return;
+    }
+
+    console.log("Valid Number!");
+  }
+
+  const showAlert = (title) =>
+    Alert.alert(title, "Please enter a valid number.", [
+      {
+        text: "Okay",
+        style: "destructive",
+        onPress: resetInputHandler,
+      },
+    ]);
 
   return (
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.numberInput}
-        value={currentNumber}
+        value={enteredNumber}
+        onChangeText={numberInputHandler}
         maxLength={2}
         keyboardType="numeric"
         autoCapitalize="none" // not important here
       />
       {/* Buttons are here */}
-      <View style={styles.buttonContainer}>
-        <PrimaryButton>Reset </PrimaryButton>
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton onPress={resetInputHandler}>Reset </PrimaryButton>
+        </View>
 
-        <PrimaryButton>Confirm </PrimaryButton>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
+        </View>
       </View>
     </View>
   );
@@ -28,9 +62,9 @@ export default StartGameScreen;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    padding: 16,
+    padding: 18,
     marginTop: 100,
-    backgroundColor: "#4e0329",
+    backgroundColor: "#3b021f",
     marginHorizontal: 24,
     borderRadius: 8,
     alignItems: "center",
@@ -51,7 +85,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  buttonContainer: {
+  buttonsContainer: {
     flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
   },
 });
